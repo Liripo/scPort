@@ -5,3 +5,11 @@ LogNorm <- function(data, scale_factor = 10000L) {
     .Call(`_scPort_LogNorm`, data, scale_factor)
 }
 
+clr_norm_rcpp <- function(mat) {
+    .Call(`_scPort_clr_norm_rcpp`, mat)
+}
+
+SparseRowVarStd_rcpp <- function(mat, mu, sd, vmax) {
+    .Call(`_scPort_SparseRowVarStd_rcpp`, mat, mu, sd, vmax)
+}
+

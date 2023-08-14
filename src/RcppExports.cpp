@@ -23,9 +23,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// clr_norm_rcpp
+arma::sp_mat clr_norm_rcpp(arma::sp_mat mat);
+RcppExport SEXP _scPort_clr_norm_rcpp(SEXP matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::sp_mat >::type mat(matSEXP);
+    rcpp_result_gen = Rcpp::wrap(clr_norm_rcpp(mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SparseRowVarStd_rcpp
+NumericVector SparseRowVarStd_rcpp(arma::sp_mat mat, NumericVector mu, NumericVector sd, double vmax);
+RcppExport SEXP _scPort_SparseRowVarStd_rcpp(SEXP matSEXP, SEXP muSEXP, SEXP sdSEXP, SEXP vmaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::sp_mat >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type sd(sdSEXP);
+    Rcpp::traits::input_parameter< double >::type vmax(vmaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(SparseRowVarStd_rcpp(mat, mu, sd, vmax));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_scPort_LogNorm", (DL_FUNC) &_scPort_LogNorm, 2},
+    {"_scPort_clr_norm_rcpp", (DL_FUNC) &_scPort_clr_norm_rcpp, 1},
+    {"_scPort_SparseRowVarStd_rcpp", (DL_FUNC) &_scPort_SparseRowVarStd_rcpp, 4},
     {NULL, NULL, 0}
 };
 

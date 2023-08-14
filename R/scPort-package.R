@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom Matrix rowMeans
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib scPort, .registration = TRUE
 ## usethis namespace: end
