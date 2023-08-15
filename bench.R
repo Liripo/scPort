@@ -31,17 +31,39 @@ bench::mark(
 )
 
 
+pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
+# scale_data
+
+
+pbmc <- ScaleData(pbmc)
+
 bench::mark(
-  as.numeric(colSums(counts)),
-  sparseMatrixStats::colSums2(counts)
+  scPort:::regress_out_matrix(
+  LayerData(pbmc,layer = "data")[VariableFeatures(pbmc),],
+  latent.data = pbmc[["percent.mt"]]
+),
+
+Seurat:::RegressOutMatrix(
+  LayerData(pbmc,layer = "data")[VariableFeatures(pbmc),],
+  latent.data = pbmc[["percent.mt"]],
+  model.use = "linear"
+),iterations = 1
 )
 
-sparseMatrixStats::rowSds(counts[1:10,])
 
-Seurat:::SparseRowVarStd(
-  mat = counts,
-  mu = hvf.info$mean,
-  sd = sqrt(hvf.info$variance.expected),
-  vmax = sqrt(ncol(counts)),
-  display_progress = F
+bench::mark(
+  {
+    data <- Seurat:::FastSparseRowScale(LayerData(pbmc,layer = "data"))
+    dimnames(data) <- dimnames(LayerData(pbmc,layer = "data"))
+    data
+  },
+  Seurat:::FastRowScale(as.matrix(LayerData(pbmc,layer = "data"))),
+  iterations = 1
+)
+
+
+bench::mark(
+  Seurat:::FastSparseRowScale(LayerData(pbmc,layer = "data")),
+  FastSparseRowScale_rcpp(LayerData(pbmc,layer = "data")),
+  iterations = 1
 )

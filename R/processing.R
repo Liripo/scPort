@@ -66,3 +66,35 @@ vst <- function(counts,
   hvf.info <- hvf.info[order(hvf.info$vst.variance.standardized, decreasing = TRUE), , drop = FALSE]
   head(rownames(hvf.info), n = nfeatures)
 }
+
+
+#' 回归掉技术效应 和 细胞周期等函数
+#' 这里简单试下Seurat 的函数，用于学习 RegressOutMatrix
+#' 原来函数支持多个模型，这里只尝试 linear
+#' @param data 使用标准化矩阵
+#' @param latent.data 一个数据框，如 pbmc[["percent.mt"]]
+
+regress_out_matrix <- function(data,
+                               latent.data) {
+  vars.to.regress <- colnames(x = latent.data)
+  fmla <- paste("GENE ~", paste(vars.to.regress, collapse = "+"))
+  # 这种情况，我们将重复回归不同的Y 对于相同的X(latent.data)，来计算残差。
+  # 相对于 重复调用 lm 来这样做，我们更愿意避免对 latent.data 矩阵反复QR分解，而是计算一次并复用
+  # 要点: 只做一次QR分解，然后后面反复使用
+  regression.mat <- cbind(latent.data, data[1, ])
+  colnames(regression.mat) <- c(colnames(x = latent.data),
+                                "GENE")
+  qr <- lm(as.formula(fmla), data = regression.mat, qr = TRUE)$qr
+  rm(regression.mat)
+
+  # 可以作加速，Rcpp 调R 函数
+  # data.resid <- matrix(nrow = nrow(x = data), ncol = ncol(x = data))
+  # for (i in seq_len(nrow(data))) {
+  #   regression.mat <- qr.resid(qr = qr,y = data[i, ])
+  #   data.resid[i, ] <- regression.mat
+  # }
+
+  data.resid <- regress_out_matrix_rcpp(mat = as.matrix(data),qr = qr)
+
+  data.resid
+}

@@ -13,3 +13,11 @@ SparseRowVarStd_rcpp <- function(mat, mu, sd, vmax) {
     .Call(`_scPort_SparseRowVarStd_rcpp`, mat, mu, sd, vmax)
 }
 
+regress_out_matrix_rcpp <- function(mat, qr) {
+    .Call(`_scPort_regress_out_matrix_rcpp`, mat, qr)
+}
+
+FastSparseRowScale_rcpp <- function(mat, scale = TRUE, center = TRUE, scale_max = 10) {
+    .Call(`_scPort_FastSparseRowScale_rcpp`, mat, scale, center, scale_max)
+}
+

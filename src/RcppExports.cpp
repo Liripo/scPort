@@ -48,11 +48,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// regress_out_matrix_rcpp
+NumericMatrix regress_out_matrix_rcpp(NumericMatrix mat, Rcpp::List qr);
+RcppExport SEXP _scPort_regress_out_matrix_rcpp(SEXP matSEXP, SEXP qrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type qr(qrSEXP);
+    rcpp_result_gen = Rcpp::wrap(regress_out_matrix_rcpp(mat, qr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FastSparseRowScale_rcpp
+arma::mat FastSparseRowScale_rcpp(arma::sp_mat mat, bool scale, bool center, double scale_max);
+RcppExport SEXP _scPort_FastSparseRowScale_rcpp(SEXP matSEXP, SEXP scaleSEXP, SEXP centerSEXP, SEXP scale_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< arma::sp_mat >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< double >::type scale_max(scale_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(FastSparseRowScale_rcpp(mat, scale, center, scale_max));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_scPort_LogNorm", (DL_FUNC) &_scPort_LogNorm, 2},
     {"_scPort_clr_norm_rcpp", (DL_FUNC) &_scPort_clr_norm_rcpp, 1},
     {"_scPort_SparseRowVarStd_rcpp", (DL_FUNC) &_scPort_SparseRowVarStd_rcpp, 4},
+    {"_scPort_regress_out_matrix_rcpp", (DL_FUNC) &_scPort_regress_out_matrix_rcpp, 2},
+    {"_scPort_FastSparseRowScale_rcpp", (DL_FUNC) &_scPort_FastSparseRowScale_rcpp, 4},
     {NULL, NULL, 0}
 };
 
